@@ -1,24 +1,27 @@
-# Use an official image with both Python and Node.js
-FROM node:18-bullseye
-
-# Install pip and Python dependencies
-RUN apt-get update && \
-    apt-get install -y python3-pip
+# Use an official Node.js image with Python and pip preinstalled
+FROM node:18-slim
 
 # Set working directory
 WORKDIR /app
 
-# Copy both frontend and backend files
+# Install Python3 and pip
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy files
 COPY . .
 
 # Install Node.js dependencies
 RUN npm install
 
-# Install Python packages
-RUN pip3 install --upgrade pip
-RUN PIP_CONFIG_FILE=./pip.conf pip3 install -r requirements.txt
+# Install Python dependencies
+RUN pip3 install --upgrade pip && \
+    pip3 install -r backend/requirements.txt
 
-# Set environment variables if needed (can also be set in Render dashboard)
+# Expose port (change if your app uses a different one)
+EXPOSE 3000
 
-# Command to start your app (change this if you're using something else)
-CMD ["npm", "start"]
+# Start the Node.js app (adjust this if you're using another script)
+CMD ["node", "index.js"]
