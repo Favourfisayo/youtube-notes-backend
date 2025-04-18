@@ -1,27 +1,35 @@
-# Use an official Node.js image with Python and pip preinstalled
 FROM node:18-slim
+
+# Avoids interaction prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update apt and install Python3 + pip with dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    ca-certificates \
+    curl \
+    gnupg \
+    build-essential && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Install Python3 and pip
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Copy files
+# Copy project files
 COPY . .
 
-# Install Node.js dependencies
+# Install Node.js deps
 RUN npm install
 
-# Install Python dependencies
+# Install Python deps
 RUN pip3 install --upgrade pip && \
     pip3 install -r backend/requirements.txt
 
-# Expose port (change if your app uses a different one)
+# Expose port (adjust if needed)
 EXPOSE 3000
 
-# Start the Node.js app (adjust this if you're using another script)
+# Start the app
 CMD ["node", "index.js"]
