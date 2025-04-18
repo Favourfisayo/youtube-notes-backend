@@ -1,13 +1,8 @@
-import os
 import sys
 import json
 from youtube_transcript_api import YouTubeTranscriptApi
 
 video_id = sys.argv[1]
-
-# Set up proxy using environment variables
-os.environ["http_proxy"] = os.getenv("HTTP_PROXY")
-os.environ["https_proxy"] = os.getenv("HTTPS_PROXY")
 
 try:
     transcript = YouTubeTranscriptApi.get_transcript(video_id)
