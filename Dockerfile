@@ -22,7 +22,7 @@ RUN npm install
 
 # Install Python dependencies (from the requirements.txt file)
 RUN pip3 install --upgrade pip && \
-    pip3 install -r backend/requirements.txt
+    pip3 install -r ./requirements.txt
 
 # Expose the port the app will run on
 EXPOSE 3000
