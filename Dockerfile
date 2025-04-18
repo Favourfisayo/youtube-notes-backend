@@ -11,6 +11,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Create a symlink for python (in case it's expected to be 'python' instead of 'python3')
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
 # Set the working directory inside the container
 WORKDIR /app
 
@@ -22,7 +25,7 @@ RUN npm install
 
 # Install Python dependencies (from the requirements.txt file)
 RUN pip3 install --upgrade pip && \
-    pip3 install -r ./requirements.txt
+    pip3 install -r backend/requirements.txt
 
 # Expose the port the app will run on
 EXPOSE 3000
